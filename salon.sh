@@ -54,9 +54,9 @@ fi
 CHECKING_CLIENT() {
       # Checking if the customer is already in the salon's database
       echo -e "\nWhat is your phone number?"
-      read PHONE_NUMBER
-      export PHONE_NUMBER
-      IS_CUSTOMER_ID_IN_DATABASE=$($PSQL "SELECT customer_id FROM customers WHERE phone = '$PHONE_NUMBER';")
+      read CUSTOMER_PHONE
+      export CUSTOMER_PHONE
+      IS_CUSTOMER_ID_IN_DATABASE=$($PSQL "SELECT customer_id FROM customers WHERE phone = '$CUSTOMER_PHONE';")
       if [[ -z $IS_CUSTOMER_ID_IN_DATABASE ]]
       then
         ADDING_NEW_CLIENT "I don't have a record for that phone number, what's your name?"
@@ -73,9 +73,9 @@ ADDING_NEW_CLIENT() {
   then
     echo -e "\n$1"
   fi
-  read NEW_NAME
-  ADDING_NEW_CLIENT_RESULT="$($PSQL "INSERT INTO customers(phone, name) VALUES('$PHONE_NUMBER', '$NEW_NAME');")"
-  IS_CUSTOMER_ID_IN_DATABASE=$($PSQL "SELECT customer_id FROM customers WHERE phone = '$PHONE_NUMBER';")
+  read CUSTOMER_NAME
+  ADDING_NEW_CLIENT_RESULT="$($PSQL "INSERT INTO customers(phone, name) VALUES('$CUSTOMER_PHONE', '$CUSTOMER_NAME');")"
+  IS_CUSTOMER_ID_IN_DATABASE=$($PSQL "SELECT customer_id FROM customers WHERE phone = '$CUSTOMER_PHONE';")
   IS_CUSTOMER_ID_IN_DATABASE="$(echo "$IS_CUSTOMER_ID_IN_DATABASE" | sed  's/ //g')"
   export IS_CUSTOMER_ID_IN_DATABASE
   SETTING_AN_APPOINTMENT
@@ -83,12 +83,12 @@ ADDING_NEW_CLIENT() {
 
 SETTING_AN_APPOINTMENT() { 
   #echo "$IS_CUSTOMER_ID_IN_DATABASE"
-  CLIENTS_NAME="$($PSQL "SELECT name FROM customers WHERE phone = '$PHONE_NUMBER';")"
+  CLIENTS_NAME="$($PSQL "SELECT name FROM customers WHERE phone = '$CUSTOMER_PHONE';")"
   CLIENTS_NAME="$(echo "$CLIENTS_NAME" | sed -E 's/^ *| *$//')"
   echo -e "\nWhat time would you like your $SERVICE_ID_NAME, $CLIENTS_NAME?"
-  read TIME_OF_APPOINTMENT
-  SETTING_NEW_APPOINTMENT_RESULT="$($PSQL "INSERT INTO appointments(customer_id, service_id, time) VALUES($IS_CUSTOMER_ID_IN_DATABASE, $SERVICE_ID_SELECTED, '$TIME_OF_APPOINTMENT');")"
-  echo -e "\nI have put you down for a $SERVICE_ID_NAME at $TIME_OF_APPOINTMENT, $CLIENTS_NAME."
+  read SERVICE_TIME
+  SETTING_NEW_APPOINTMENT_RESULT="$($PSQL "INSERT INTO appointments(customer_id, service_id, time) VALUES($IS_CUSTOMER_ID_IN_DATABASE, $SERVICE_ID_SELECTED, '$SERVICE_TIME');")"
+  echo -e "\nI have put you down for a $SERVICE_ID_NAME at $SERVICE_TIME, $CLIENTS_NAME."
   MAIN_MENU "Welcome to My Salon, how can I help you?"
 }
 MAIN_MENU "Welcome to My Salon, how can I help you?"
