@@ -26,7 +26,8 @@ fi
 
   if [[ ! $USER_GUESS =~ ^[0-9]*$ || -z $USER_GUESS ]]
   then
-    echo "That is not an integer, guess again:"     
+    echo "That is not an integer, guess again:" 
+    echo "Guess the secret number between 1 and 1000:"
   else
     if [[ $USER_GUESS -lt $SECRET_NUMBER ]]
     then
