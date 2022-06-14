@@ -40,6 +40,7 @@ GUESS_THE_SECRET_NUMBER() {
   #validating input for a guess
   if [[ ! $USER_GUESS =~ ^[0-9]*$ || -z $USER_GUESS ]]
   then
+    NUMBER_OF_GUESSES=$( expr $NUMBER_OF_GUESSES + 1 )
     echo "That is not an integer, guess again:"
     GUESS_THE_SECRET_NUMBER "Guess the secret number between 1 and 1000:"
   else
@@ -81,10 +82,9 @@ if [[ -n $IS_A_CLIENT_RESULT ]]
 then
   # the player has a record in the players database
   CLIENT_STATUS="old"
-  echo "$IS_A_CLIENT_RESULT" | while IFS="|" read USER GAMES_PLAYED BEST_GAME
-  do
-    echo "Welcome back, $USER_NAME! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."    
-  done
+  GAMES_PLAYED=$($PSQL "SELECT games_played FROM players WHERE username = '$USER_NAME';")
+  BEST_GAME=$($PSQL "SELECT best_game FROM players WHERE username = '$USER_NAME';")
+  echo "Welcome back, $USER_NAME! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
   GUESS_THE_SECRET_NUMBER "Guess the secret number between 1 and 1000:"
 else
   # new player detected
