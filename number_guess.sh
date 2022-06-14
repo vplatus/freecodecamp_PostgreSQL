@@ -32,9 +32,9 @@ GUESS_THE_SECRET_NUMBER() {
     fi    
   fi   
   done
-      GETTING_USER_ID_RESULT=$($PSQL "SELECT user_id FROM users WHERE name = '$USER_NAME';")
-      INSERT_PLAYERS_GAME_RESULT="$($PSQL "INSERT INTO games(user_id, best_game) VALUES($GETTING_USER_ID_RESULT, $NUMBER_OF_GUESSES);")"
-      echo "You guessed it in $NUMBER_OF_GUESSES tries. The secret number was $SECRET_NUMBER. Nice job!"
+  GETTING_USER_ID_RESULT=$($PSQL "SELECT user_id FROM users WHERE name = '$USER_NAME';")
+  INSERT_PLAYERS_GAME_RESULT="$($PSQL "INSERT INTO games(user_id, best_game) VALUES($GETTING_USER_ID_RESULT, $NUMBER_OF_GUESSES);")"
+  echo "You guessed it in $NUMBER_OF_GUESSES tries. The secret number was $SECRET_NUMBER. Nice job!"
 }
 
 
