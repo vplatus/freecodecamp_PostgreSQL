@@ -2,7 +2,7 @@
 PSQL="psql --username=freecodecamp --dbname=number_guess -t --no-align -c"
 
 # getting variable for secret number to guess
-SECRET_NUMBER=$( expr $RANDOM % 6 + 1 )
+SECRET_NUMBER=$( expr $RANDOM % 1000 + 1 )
 # echo "SECRET NUMBER IS: $SECRET_NUMBER" # for testing
 
 # counting user guesses
